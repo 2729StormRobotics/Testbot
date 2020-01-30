@@ -42,6 +42,10 @@ public class Vision extends SubsystemBase {
     return m_limelightHasValidTarget;
   }
 
+  public double getDeltaX() {
+    return tx;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
