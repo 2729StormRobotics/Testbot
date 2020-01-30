@@ -25,6 +25,7 @@ import static frc.robot.Constants.OIConstants.*;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain;
+  private final Vision m_vision;
 
   private final XboxController m_drivePad;
 
@@ -35,8 +36,10 @@ public class RobotContainer {
     m_drivePad = new XboxController(kDrivePadPort);
 
     m_drivetrain = new Drivetrain();
+    m_vision = new Vision();
 
     SmartDashboard.putData("Drivetrain Subsystem", m_drivetrain);
+    SmartDashboard.putData("Vision Subsystem", m_vision);
 
     m_drivetrain.setDefaultCommand(
       new HumanDrive(
@@ -46,7 +49,7 @@ public class RobotContainer {
         m_drivetrain
       )
     );
-    
+
     // Configure the button bindings
     configureButtonBindings();
   }

@@ -26,4 +26,10 @@ public final class Constants {
     public final class OIConstants {
         public static final int kDrivePadPort = 0;
     }
+
+    public final class VisionConstants {
+        public static final double kP = 1.0;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+    }
 }
