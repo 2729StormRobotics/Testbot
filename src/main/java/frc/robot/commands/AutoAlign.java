@@ -35,7 +35,7 @@ public class AutoAlign extends PIDCommand {
         // This uses the output
         output -> {
           // Use the output here
-          drivesub.arcadeDrive(0, output, false);
+          drivesub.arcadeDrive(0, -output, false);
         });
 
     m_drivetrain = drivesub;
