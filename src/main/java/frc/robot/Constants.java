@@ -22,4 +22,8 @@ public final class Constants {
         public static final int kRightMotor1Port = 15;
         public static final int kRightMotor2Port = 14;
     }
+
+    public final class OIConstants {
+        public static final int kDrivePadPort = 0;
+    }
 }

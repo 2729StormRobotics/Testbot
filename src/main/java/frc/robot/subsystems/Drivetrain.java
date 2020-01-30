@@ -11,6 +11,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.DriveConstants.*;
@@ -28,6 +30,11 @@ public class Drivetrain extends SubsystemBase {
 
   // Declare our DifferentialDrive object to drive the robot
   private final DifferentialDrive m_drivetrain;
+
+  // Add a String object to store the current drive type from SmartDashboard
+  private String m_driveType = "Tank";
+
+  SendableChooser<String> m_chooser = new SendableChooser<>();
 
   /**
    * Creates a new Drivetrain Subsystem.
@@ -51,10 +58,51 @@ public class Drivetrain extends SubsystemBase {
 
     // Instantiate our DifferentialDrive
     m_drivetrain = new DifferentialDrive(m_leftMotors, m_rightMotors);
+
+    // Add options to the drive type chooser
+    m_chooser.addOption("Tank Drive", "Tank");
+    m_chooser.addOption("Arcade Drive", "Arcade");
+    m_chooser.addOption("Trigger Drive", "Trigger");
+  }
+
+  public void tankDrive(double left, double right, boolean squared) {
+    m_drivetrain.tankDrive(left, right, squared);
+  }
+
+  public void arcadeDrive(double straight, double turn, boolean squared) {
+    m_drivetrain.arcadeDrive(straight, turn, squared);
+  }
+
+  public void triggerDrive(double forward, double reverse, double turn, boolean squared) {
+    arcadeDrive(forward-reverse, turn, squared);
+  }
+
+  public void stopDrive() {
+    tankDrive(0, 0, false);
+  }
+  
+  private void updateDriveType() {
+    m_driveType = m_chooser.getSelected();
+  }
+
+  public String getDriveType() {
+    return m_driveType;
+  }
+
+  public void log() {
+    SmartDashboard.putData("Left Motor 1", m_leftMotor1);
+    SmartDashboard.putData("Left Motor 2", m_leftMotor2);
+    SmartDashboard.putData("Right Motor 1", m_rightMotor1);
+    SmartDashboard.putData("Right Motor 2", m_rightMotor2);
+    SmartDashboard.putData("Left Motors", m_leftMotors);
+    SmartDashboard.putData("Right Motors", m_rightMotors);
+    SmartDashboard.putData("Drivetrain Status", m_drivetrain);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    log();
+    updateDriveType();
   }
 }

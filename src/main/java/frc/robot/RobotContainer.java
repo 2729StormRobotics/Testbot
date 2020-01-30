@@ -9,9 +9,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import static edu.wpi.first.wpilibj.GenericHID.Hand.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.Constants.OIConstants.*;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -23,11 +26,26 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain;
 
+  private final XboxController m_drivePad;
+
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    m_drivePad = new XboxController(kDrivePadPort);
+
     m_drivetrain = new Drivetrain();
+
+    SmartDashboard.putData("Drivetrain Subsystem", m_drivetrain);
+
+    m_drivetrain.setDefaultCommand(
+      new HumanDrive(
+        m_drivePad.getY(kLeft), m_drivePad.getY(kRight),
+        m_drivePad.getY(kLeft), m_drivePad.getX(kRight),
+        m_drivePad.getTriggerAxis(kRight), m_drivePad.getTriggerAxis(kLeft),
+        m_drivetrain
+      )
+    );
     
     // Configure the button bindings
     configureButtonBindings();
