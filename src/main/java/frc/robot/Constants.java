@@ -16,11 +16,21 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public final class DriveConstants {
+    public static final class DriveConstants {
         public static final int kLeftMotor1Port = 0;
         public static final int kLeftMotor2Port = 1;
         public static final int kRightMotor1Port = 15;
         public static final int kRightMotor2Port = 14;
+
+        /**
+         * Our PID values for Point Turn. Must be determined experimentally.
+         */
+        public static final class PointTurnPID {
+            public static final double kP = 0.002;
+            public static final double kI = 0.0;
+            public static final double kD = 0.0001;
+            public static final double kTolerance = 2.0; // The tolerance in degrees
+        }
     }
 
     public final class OIConstants {

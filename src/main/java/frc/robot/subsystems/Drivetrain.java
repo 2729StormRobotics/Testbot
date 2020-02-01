@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -30,6 +31,9 @@ public class Drivetrain extends SubsystemBase {
 
   // Declare our DifferentialDrive object to drive the robot
   private final DifferentialDrive m_drivetrain;
+
+  //Declare our gyro object
+  private final ADIS16470_IMU m_imu;
 
   // Add a String object to store the current drive type from SmartDashboard
   private String m_driveType = "Tank";
@@ -58,6 +62,9 @@ public class Drivetrain extends SubsystemBase {
 
     // Instantiate our DifferentialDrive
     m_drivetrain = new DifferentialDrive(m_leftMotors, m_rightMotors);
+
+    //Instantiate our gyro object
+    m_imu = new ADIS16470_IMU();
 
     // Add options to the drive type chooser
     m_chooser.addOption("Tank Drive", "Tank");
@@ -89,6 +96,15 @@ public class Drivetrain extends SubsystemBase {
     return m_driveType;
   }
 
+  public double getAngle() {
+    return m_imu.getAngle();
+    
+  }
+
+  public void resetGyro() {
+    m_imu.reset();
+  }
+
   public void log() {
     SmartDashboard.putData("Left Motor 1", m_leftMotor1);
     SmartDashboard.putData("Left Motor 2", m_leftMotor2);
@@ -97,6 +113,7 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putData("Left Motors", m_leftMotors);
     SmartDashboard.putData("Right Motors", m_rightMotors);
     SmartDashboard.putData("Drivetrain Status", m_drivetrain);
+    SmartDashboard.putData("Gyro", m_imu);
   }
 
   @Override

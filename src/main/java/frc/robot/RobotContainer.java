@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import static frc.robot.Constants.OIConstants.*;
 
 /**
@@ -41,6 +43,12 @@ public class RobotContainer {
     SmartDashboard.putData("Drivetrain Subsystem", m_drivetrain);
     SmartDashboard.putData("Vision Subsystem", m_vision);
 
+    //SmartDashboard.putData(new PointTurn(180, m_drivetrain));
+    SmartDashboard.putNumber("Target Angle", 90);
+    SmartDashboard.putData("Turn to Angle", new PointTurn(SmartDashboard.getNumber("Target Angle", 0.0), m_drivetrain));
+
+    SmartDashboard.putData("Reset Gyro", new InstantCommand(m_drivetrain::resetGyro, m_drivetrain));
+
     m_drivetrain.setDefaultCommand(
       new HumanDrive(
         m_drivePad.getY(kLeft), m_drivePad.getY(kRight),
@@ -49,6 +57,8 @@ public class RobotContainer {
         m_drivetrain
       )
     );
+
+
 
     // Configure the button bindings
     configureButtonBindings();
