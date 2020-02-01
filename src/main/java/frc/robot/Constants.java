@@ -26,10 +26,11 @@ public final class Constants {
          * Our PID values for Point Turn. Must be determined experimentally.
          */
         public static final class PointTurnPID {
-            public static final double kP = 0.002;
+            public static final double kP = 0.05;
             public static final double kI = 0.0;
-            public static final double kD = 0.0001;
-            public static final double kTolerance = 2.0; // The tolerance in degrees
+            public static final double kD = 0.005;
+            public static final double kPositionTolerance = 0.5; // The tolerance in degrees
+            public static final double kVelocityTolerance = 0.1;
         }
     }
 

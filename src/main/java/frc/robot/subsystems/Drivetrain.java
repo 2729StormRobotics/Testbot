@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.PointTurn;
 
 import static frc.robot.Constants.DriveConstants.*;
 
@@ -34,6 +35,8 @@ public class Drivetrain extends SubsystemBase {
 
   //Declare our gyro object
   private final ADIS16470_IMU m_imu;
+
+  private double m_targetAngle;
 
   // Add a String object to store the current drive type from SmartDashboard
   private String m_driveType = "Tank";
@@ -66,6 +69,8 @@ public class Drivetrain extends SubsystemBase {
     //Instantiate our gyro object
     m_imu = new ADIS16470_IMU();
 
+    m_targetAngle = 0;
+
     // Add options to the drive type chooser
     m_chooser.addOption("Tank Drive", "Tank");
     m_chooser.addOption("Arcade Drive", "Arcade");
@@ -97,7 +102,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getAngle() {
-    return m_imu.getAngle();
+    return m_imu.pidGet();
     
   }
 
@@ -105,20 +110,27 @@ public class Drivetrain extends SubsystemBase {
     m_imu.reset();
   }
 
+  public double getTargetAngle() {
+    return m_targetAngle;
+  }
+
   public void log() {
-    SmartDashboard.putData("Left Motor 1", m_leftMotor1);
+    /*SmartDashboard.putData("Left Motor 1", m_leftMotor1);
     SmartDashboard.putData("Left Motor 2", m_leftMotor2);
     SmartDashboard.putData("Right Motor 1", m_rightMotor1);
-    SmartDashboard.putData("Right Motor 2", m_rightMotor2);
+    SmartDashboard.putData("Right Motor 2", m_rightMotor2);*/
     SmartDashboard.putData("Left Motors", m_leftMotors);
     SmartDashboard.putData("Right Motors", m_rightMotors);
     SmartDashboard.putData("Drivetrain Status", m_drivetrain);
     SmartDashboard.putData("Gyro", m_imu);
+    //SmartDashboard.putNumber("Robot Angle", getAngle());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_targetAngle = SmartDashboard.getNumber("Target Angle", 90.0);
+    SmartDashboard.putNumber("Received Angle", getTargetAngle());
     log();
     updateDriveType();
   }

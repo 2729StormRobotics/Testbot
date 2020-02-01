@@ -13,33 +13,44 @@ import frc.robot.subsystems.Drivetrain;
 
 import static frc.robot.Constants.DriveConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class PointTurn extends PIDCommand {
+
+  private final Drivetrain m_drivetrain;
+
   /**
    * Creates a new PointTurn.
    */
-  public PointTurn(double angle, Drivetrain drivetrain) {
+  public PointTurn(DoubleSupplier angle, Drivetrain drivetrain) {
     super(
         // The controller that the command will use
         new PIDController(PointTurnPID.kP, PointTurnPID.kI, PointTurnPID.kD),
         // This should return the measurement
         () -> drivetrain.getAngle(),
         // This should return the setpoint (can also be a constant)
-        () -> angle,
+        () -> angle.getAsDouble(),
         // This uses the output
         output -> {
           // Use the output here
-          drivetrain.arcadeDrive(0, output, false);
+          drivetrain.arcadeDrive(0, -output, false);
         },
         drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
-
+        m_drivetrain = drivetrain;
         getController().enableContinuousInput(-180, 180);
-        getController().setTolerance(PointTurnPID.kTolerance);
+        getController().setTolerance(PointTurnPID.kPositionTolerance, PointTurnPID.kVelocityTolerance);
         
+  }
+
+  @Override
+  public void initialize() {
+    m_drivetrain.resetGyro();
+    m_controller.reset();
   }
 
   // Returns true when the command should end.

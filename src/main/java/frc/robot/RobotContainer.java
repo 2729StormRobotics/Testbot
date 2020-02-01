@@ -41,11 +41,12 @@ public class RobotContainer {
     m_vision = new Vision();
 
     SmartDashboard.putData("Drivetrain Subsystem", m_drivetrain);
-    SmartDashboard.putData("Vision Subsystem", m_vision);
+    //SmartDashboard.putData("Vision Subsystem", m_vision);
+    //SmartDashboard.putNumber("Received Angle", m_drivetrain.getTargetAngle());
 
     //SmartDashboard.putData(new PointTurn(180, m_drivetrain));
-    SmartDashboard.putNumber("Target Angle", 90);
-    SmartDashboard.putData("Turn to Angle", new PointTurn(SmartDashboard.getNumber("Target Angle", 0.0), m_drivetrain));
+    SmartDashboard.putNumber("Target Angle", 180);
+    SmartDashboard.putData("Turn to Angle", new PointTurn(() -> m_drivetrain.getTargetAngle(), m_drivetrain));
 
     SmartDashboard.putData("Reset Gyro", new InstantCommand(m_drivetrain::resetGyro, m_drivetrain));
 
