@@ -36,8 +36,6 @@ public class Drivetrain extends SubsystemBase {
   //Declare our gyro object
   private final ADIS16470_IMU m_imu;
 
-  private double m_targetAngle;
-
   // Add a String object to store the current drive type from SmartDashboard
   private String m_driveType = "Tank";
 
@@ -68,8 +66,6 @@ public class Drivetrain extends SubsystemBase {
 
     //Instantiate our gyro object
     m_imu = new ADIS16470_IMU();
-
-    m_targetAngle = 0.0;
 
     // Add options to the drive type chooser
     m_chooser.addOption("Tank Drive", "Tank");
@@ -113,7 +109,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getTargetAngle() {
-    return SmartDashboard.getNumber("Target Angle", 90.0);
+    return SmartDashboard.getNumber("Target Angle", 0.0);
   }
 
   public void log() {
