@@ -69,12 +69,14 @@ public class Drivetrain extends SubsystemBase {
     //Instantiate our gyro object
     m_imu = new ADIS16470_IMU();
 
-    m_targetAngle = 0;
+    m_targetAngle = 0.0;
 
     // Add options to the drive type chooser
     m_chooser.addOption("Tank Drive", "Tank");
     m_chooser.addOption("Arcade Drive", "Arcade");
     m_chooser.addOption("Trigger Drive", "Trigger");
+
+    SmartDashboard.putNumber("Received Angle", getTargetAngle());
   }
 
   public void tankDrive(double left, double right, boolean squared) {
@@ -111,7 +113,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getTargetAngle() {
-    return m_targetAngle;
+    return SmartDashboard.getNumber("Target Angle", 90.0);
   }
 
   public void log() {
@@ -129,8 +131,6 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_targetAngle = SmartDashboard.getNumber("Target Angle", 90.0);
-    SmartDashboard.putNumber("Received Angle", getTargetAngle());
     log();
     updateDriveType();
   }
