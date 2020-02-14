@@ -8,10 +8,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,6 +39,9 @@ public class Drivetrain extends SubsystemBase {
   // Create the encoder objects
   private final Encoder m_leftEncoder;
   private final Encoder m_rightEncoder;
+
+  // Add the NavX for gyroscope feedback
+  private final AHRS m_navX;
 
   // Add a String object to store the current drive type from SmartDashboard
   private String m_driveType = "Tank";
@@ -72,6 +78,9 @@ public class Drivetrain extends SubsystemBase {
     // Set our encoder conversions
     m_leftEncoder.setDistancePerPulse(kDistancePerPulse);
     m_rightEncoder.setDistancePerPulse(kDistancePerPulse);
+
+    // Instantiate our NavX
+    m_navX = new AHRS(Port.kMXP);
 
     // Add options to the drive type chooser
     m_chooser.addOption("Tank Drive", "Tank");
@@ -131,6 +140,27 @@ public class Drivetrain extends SubsystemBase {
     double rightSpeed = getRightSpeed();
     double avgSpeed = (leftSpeed + rightSpeed) / 2.0;
     return avgSpeed;
+  }
+
+  public void resetLeftEncoder() {
+    m_leftEncoder.reset();
+  }
+
+  public void resetRightEncoder() {
+    m_rightEncoder.reset();
+  }
+
+  public void resetEncoders() {
+    resetLeftEncoder();
+    resetRightEncoder();
+  }
+
+  public double getRobotHeading() {
+    return m_navX.getAngle();
+  }
+
+  public void resetRobotHeading() {
+    m_navX.zeroYaw();
   }
 
   public void log() {
