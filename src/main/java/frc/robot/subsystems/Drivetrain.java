@@ -9,7 +9,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +32,10 @@ public class Drivetrain extends SubsystemBase {
 
   // Declare our DifferentialDrive object to drive the robot
   private final DifferentialDrive m_drivetrain;
+
+  // Create the encoder objects
+  private final Encoder m_leftEncoder;
+  private final Encoder m_rightEncoder;
 
   // Add a String object to store the current drive type from SmartDashboard
   private String m_driveType = "Tank";
@@ -59,6 +65,14 @@ public class Drivetrain extends SubsystemBase {
     // Instantiate our DifferentialDrive
     m_drivetrain = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
+    // Instantiate our encoders
+    m_leftEncoder = new Encoder(kLeftEncoderPort, kLeftEncoderPort + 1, false);
+    m_rightEncoder = new Encoder(kRightEncoderPort, kRightEncoderPort + 1, true);
+
+    // Set our encoder conversions
+    m_leftEncoder.setDistancePerPulse(kDistancePerPulse);
+    m_rightEncoder.setDistancePerPulse(kDistancePerPulse);
+
     // Add options to the drive type chooser
     m_chooser.addOption("Tank Drive", "Tank");
     m_chooser.addOption("Arcade Drive", "Arcade");
@@ -74,13 +88,13 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void triggerDrive(double forward, double reverse, double turn, boolean squared) {
-    arcadeDrive(forward-reverse, turn, squared);
+    arcadeDrive(forward - reverse, turn, squared);
   }
 
   public void stopDrive() {
     tankDrive(0, 0, false);
   }
-  
+
   private void updateDriveType() {
     m_driveType = m_chooser.getSelected();
   }
@@ -89,14 +103,44 @@ public class Drivetrain extends SubsystemBase {
     return m_driveType;
   }
 
+  public double getLeftPosition() {
+    return m_leftEncoder.getDistance();
+  }
+
+  public double getRightPosition() {
+    return m_rightEncoder.getDistance();
+  }
+
+  public double getAverageDistance() {
+    double leftPosition = getLeftPosition();
+    double rightPosition = getRightPosition();
+    double avgDistance = (leftPosition + rightPosition) / 2.0;
+    return avgDistance;
+  }
+
+  public double getLeftSpeed() {
+    return m_leftEncoder.getRate();
+  }
+
+  public double getRightSpeed() {
+    return m_rightEncoder.getRate();
+  }
+
+  public double getAverageSpeed() {
+    double leftSpeed = getLeftSpeed();
+    double rightSpeed = getRightSpeed();
+    double avgSpeed = (leftSpeed + rightSpeed) / 2.0;
+    return avgSpeed;
+  }
+
   public void log() {
     SmartDashboard.putData("Left Motor 1", m_leftMotor1);
     SmartDashboard.putData("Left Motor 2", m_leftMotor2);
     SmartDashboard.putData("Right Motor 1", m_rightMotor1);
     SmartDashboard.putData("Right Motor 2", m_rightMotor2);
-    SmartDashboard.putData("Left Motors", m_leftMotors);
-    SmartDashboard.putData("Right Motors", m_rightMotors);
     SmartDashboard.putData("Drivetrain Status", m_drivetrain);
+    SmartDashboard.putData("Left Encoder", m_leftEncoder);
+    SmartDashboard.putData("Right Encoder", m_rightEncoder);
   }
 
   @Override

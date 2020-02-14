@@ -21,6 +21,13 @@ public final class Constants {
         public static final int kLeftMotor2Port = 1;
         public static final int kRightMotor1Port = 15;
         public static final int kRightMotor2Port = 14;
+
+        public static final int kLeftEncoderPort = 0;
+        public static final int kRightEncoderPort = 2;
+        public static final int kEncoderCPR = 360;
+
+        public static final int kWheelDiameter = 6; // Inches
+        public static final double kDistancePerPulse = Math.PI * kWheelDiameter / kEncoderCPR;
     }
 
     public final class OIConstants {
