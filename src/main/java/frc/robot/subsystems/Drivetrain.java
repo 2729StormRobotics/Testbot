@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,6 +29,8 @@ public class Drivetrain extends SubsystemBase {
 
   // Declare our DifferentialDrive object to drive the robot
   private final DifferentialDrive m_drivetrain;
+
+  private final DigitalInput m_lineFollower;
 
   /**
    * Creates a new Drivetrain Subsystem.
@@ -51,6 +54,8 @@ public class Drivetrain extends SubsystemBase {
 
     // Instantiate our DifferentialDrive
     m_drivetrain = new DifferentialDrive(m_leftMotors, m_rightMotors);
+
+    m_lineFollower = new DigitalInput(0);
   }
 
   @Override
